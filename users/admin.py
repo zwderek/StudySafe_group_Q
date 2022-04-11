@@ -4,7 +4,6 @@ from .models import CustomUser
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 
 class CustomUserAdmin(UserAdmin):
-    
     model = CustomUser
     
     add_fieldsets = (
