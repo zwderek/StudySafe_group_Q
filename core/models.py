@@ -23,7 +23,7 @@ class Venue(models.Model):
     capacity = models.IntegerField()
 
     def __str__(self):
-        return self.venue_code
+        return f'{self.venue_code} {self.location}'
 
 class EntryExit(models.Model):
     member = models.ForeignKey(HKU_member, on_delete=models.CASCADE)
