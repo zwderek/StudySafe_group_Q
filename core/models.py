@@ -7,6 +7,10 @@ class HKU_member(models.Model):
 
     def __str__(self):
         return f'{self.hku_id} {self.name}'
+    
+    class Meta:
+        verbose_name = 'HKU Member'
+        verbose_name_plural = 'HKU Members'
 
     class Meta:
         verbose_name = 'HKU Member'
@@ -39,4 +43,8 @@ class EntryExit(models.Model):
 
     class Meta:
         verbose_name = "EntryExit"
+<<<<<<< HEAD
         verbose_name_plural = 'EntriesExits'
+=======
+        verbose_name_plural = 'EntriesExits'
+>>>>>>> 81307a9a0feac6867ed359ef03f7e6046e8cea5b
