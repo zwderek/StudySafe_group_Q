@@ -43,8 +43,5 @@ class EntryExit(models.Model):
 
     class Meta:
         verbose_name = "EntryExit"
-<<<<<<< HEAD
         verbose_name_plural = 'EntriesExits'
-=======
-        verbose_name_plural = 'EntriesExits'
->>>>>>> 81307a9a0feac6867ed359ef03f7e6046e8cea5b
+
