@@ -17,7 +17,7 @@ class Venue(models.Model):
     type = models.CharField(max_length=2, choices=VENUE_TYPES)
     capacity = models.IntegerField()
     def __str__(self):
-        return self.venue_code
+        return f'{self.venue_code} {self.location}'
 
 class EntryExit(models.Model):
     member = models.ForeignKey(HKU_member, on_delete=models.CASCADE)
@@ -25,4 +25,4 @@ class EntryExit(models.Model):
     enter_time = models.DateTimeField()
     exit_time = models.DateTimeField()
     def __str__(self):
-        return f'{self.member} {self.venue}'
+        return f'{self.member} {self.venue} {self.enter_time} {self.exit_time}'
