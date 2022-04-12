@@ -8,8 +8,8 @@ class HKU_member(models.Model):
         return f'{self.hku_id} {self.name}'
     
     class Meta:
-        verbose_name = 'HKU member'
-        verbose_name_plural = 'HKU members'
+        verbose_name = 'HKU Member'
+        verbose_name_plural = 'HKU Members'
 
 class Venue(models.Model):
     VENUE_TYPES = (
