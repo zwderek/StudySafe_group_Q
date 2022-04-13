@@ -14,11 +14,8 @@ class Members(APIView):
         members = HKU_member.objects.all()
         data = HKU_memberSerializer(members, many=True)
         return Response(data.data)
-        #return JsonResponse(data.data, safe=False)
 
     def post(self, request):
-        #data = JSONParser().parse(request)
-        #member = HKU_memberSerializer(data=data)
         member = HKU_memberSerializer(data=request.data)
         if member.is_valid():
             member.save()
@@ -35,42 +32,42 @@ class Member(APIView):
         data = HKU_memberSerializer(member)
         return Response(data.data)
 
-class HKU_Venues(View):
+class HKU_Venues(APIView):
 
     def get(self, request):
-        venues=Venue.objects.all()
-        data=serializers.VenueSerializer(venues,many=True)
-        return JsonResponse(data.data, safe=False)
+        venues = Venue.objects.all()
+        data = VenueSerializer(venues, many=True)
+        return Response(data.data)
 
     def post(self, request):
-        data = JSONParser().parse(request)
-        venue = serializers.VenueSerializer(data=data)
+        data = VenueSerializer(data=request.data)
+        venue = VenueSerializer(data=data)
         if venue.is_valid():
             venue.save()
-            return JsonResponse(venue.data, status=201)
-        return JsonResponse(venue.errors, status=400)
+            return Response(venue.data, status=201)
+        return Response(venue.errors, status=400)
 
-class HKU_Venue(View):
+class HKU_Venue(APIView):
 
     def get(self, request, pk):
         try:
-            venue=Venue.objects.get(venue_code=pk)
+            venue = Venue.objects.get(venue_code=pk)
         except Venue.DoesNotExist:
             return HttpResponse(status=404)
-        data = serializers.VenueSerializer(venue)
-        return JsonResponse(data.data)
+        data = VenueSerializer(venue)
+        return Response(data.data)
 
-class Entry_Exits(View):
+class Entry_Exits(APIView):
 
     def get(self, request):
-        ees=EntryExit.objects.all()
-        data=serializers.EntryExitSerializer(ees,many=True)
-        return JsonResponse(data.data, safe=False)
+        ees = EntryExit.objects.all()
+        data = EntryExitSerializer(ees, many=True)
+        return Response(data.data)
 
     def post(self, request):
-        data = JSONParser().parse(request)
-        ee = serializers.EntryExitSerializer(data=data)
+        data = EntryExitSerializer(data=request.data)
+        ee = EntryExitSerializer(data=data)
         if ee.is_valid():
             ee.save()
-            return JsonResponse(ee.data, status=201)
-        return JsonResponse(ee.errors, status=400)
+            return Response(ee.data, status=201)
+        return Response(ee.errors, status=400)
