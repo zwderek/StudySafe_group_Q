@@ -25,15 +25,15 @@ class Members(APIView):
             return Response(member.data, status=201)
         return Response(member.errors, status=400)
 
-class Member(View):
+class Member(APIView):
 
     def get(self, request, pk):
         try:
-            member=HKU_member.objects.get(hku_id=pk)
+            member = HKU_member.objects.get(hku_id=pk)
         except HKU_member.DoesNotExist:
             return HttpResponse(status=404)
-        data = serializers.HKU_memberSerializer(member)
-        return JsonResponse(data.data)
+        data = HKU_memberSerializer(member)
+        return Response(data.data)
 
 class HKU_Venues(View):
 
