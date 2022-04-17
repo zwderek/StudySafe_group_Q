@@ -78,27 +78,25 @@ class Entry_Exit(APIView):#API8
 
     def post(self, request, hku_id, venue_id, time):
         try:
-            ees = EntryExit.objects.filter(member=hku_id, venue=venue_id)
+            ees = EntryExit.objects.filter(member=HKU_member.objects.get(hku_id=hku_id), venue=Venue.objects.get(venue_code=venue_id))
         except EntryExit.DoesNotExist:
-            ee=EntryExit.objects.create(member=hku_id, venue=venue_id, enter_time=time, exit_time="1111-11-11 11:11:11")
+            ee=EntryExit.objects.create(member=HKU_member.objects.get(hku_id=hku_id), venue=Venue.objects.get(venue_code=venue_id), enter_time=time, exit_time="1111-11-11 11:11:11")
             ees = EntryExit.objects.all()
             data = EntryExitSerializer(ees, many=True)
             return Response(data.data, status=201)
         found=False
-        for ee in ees:
-            if ee.exit_time=="1111-11-11 11:11:11":
-                ee.exit_time=time
-                ee.save()
-                found=True
-                break
-        if not found:
-            ee=EntryExit.objects.create(member=hku_id, venue=venue_id, enter_time=time, exit_time="1111-11-11 11:11:11")
+        try:
+            ee=EntryExit.objects.get(exit_time="1111-11-11T11:11:11Z")
+        except EntryExit.DoesNotExist:
+            ee=EntryExit.objects.create(member=HKU_member.objects.get(hku_id=hku_id), venue=Venue.objects.get(venue_code=venue_id), enter_time=time, exit_time="1111-11-11 11:11:11")
+            ees = EntryExit.objects.all()
+            data = EntryExitSerializer(ees, many=True)
+            return Response(data.data, status=201)
+        ee.exit_time=time
+        ee.save()
         ees = EntryExit.objects.all()
         data = EntryExitSerializer(ees, many=True)
-        if found:
-            return Response(data.data, status=200)
-        else:
-            return Response(data.data, status=201)
+        return Response(data.data, status=200)
 
 def get_visited_venues(id, date):
     end_date = datetime.strptime(date, "%Y-%m-%d")
