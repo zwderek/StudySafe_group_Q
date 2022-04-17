@@ -14,7 +14,7 @@ urlpatterns = [
     path('api/entryexit/', api_views.Entry_Exits.as_view()),
     path('api/entryexit/<str:hku_id>/<str:venue_id>/<str:time>/', api_views.Entry_Exit.as_view()),
     #<str:time> may need to be converted in the track by the documented code below
-    
+
     path('api/venues-visited-by/<str:id>/<str:date>/', api_views.Visited_Venue.as_view()),
     path('api/close-contacts/<str:id>/<str:date>/', api_views.Close_Contacts.as_view()),
 ]
