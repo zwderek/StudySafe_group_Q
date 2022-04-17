@@ -13,5 +13,6 @@ urlpatterns = [
     path('api/venues/<str:pk>/', api_views.HKU_Venue.as_view()),
     path('api/entryexit/', api_views.Entry_Exits.as_view()),
 
-    path('api/venues-visited-by/<str:id>/<str:date>/', api_views.Visited_Venue.as_view()),
+    path('api/venues-visited-by/<str:id>/<str:date>/', api_views.Visited_Venues.as_view()),
+    path('api/close-contacts/<str:id>/<str:date>/', api_views.Close_Contacts.as_view()),
 ]
