@@ -7,6 +7,7 @@ from .models import *
 from .serializers import *
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
+from datetime import datetime, timedelta
 
 class Members(APIView):
 
@@ -71,3 +72,15 @@ class Entry_Exits(APIView):
             ee.save()
             return Response(ee.data, status=201)
         return Response(ee.errors, status=400)
+
+class Visited_Venue(APIView):
+
+    def get(self, request, id, date):
+        end_date = datetime.strptime(date, "%Y-%m-%d")
+        start_date = end_date + timedelta(days=-2)
+        queryset = EntryExit.objects.filter(member_id=id).\
+                    filter(enter_time__range=(start_date, end_date + timedelta(days=1))).\
+                    order_by('enter_time')
+        serializer = EntryExitSerializer(queryset, many=True)
+        return Response(["Venue code: "+i['venue']+" Enter time: "+i['enter_time']+" Exit time: "+i['exit_time'] for i in serializer.data])
+
