@@ -74,6 +74,32 @@ class Entry_Exits(APIView):
             return Response(ee.data, status=201)
         return Response(ee.errors, status=400)
 
+class Entry_Exit(APIView):#API8
+
+    def post(self, request, hku_id, venue_id, time):
+        try:
+            ees = EntryExit.objects.filter(member=hku_id, venue=venue_id)
+        except EntryExit.DoesNotExist:
+            ee=EntryExit.objects.create(member=hku_id, venue=venue_id, enter_time=time, exit_time="1111-11-11 11:11:11")
+            ees = EntryExit.objects.all()
+            data = EntryExitSerializer(ees, many=True)
+            return Response(data.data, status=201)
+        found=False
+        for ee in ees:
+            if ee.exit_time=="1111-11-11 11:11:11":
+                ee.exit_time=time
+                ee.save()
+                found=True
+                break
+        if not found:
+            ee=EntryExit.objects.create(member=hku_id, venue=venue_id, enter_time=time, exit_time="1111-11-11 11:11:11")
+        ees = EntryExit.objects.all()
+        data = EntryExitSerializer(ees, many=True)
+        if found:
+            return Response(data.data, status=200)
+        else:
+            return Response(data.data, status=201)
+
 def get_visited_venues(id, date):
     end_date = datetime.strptime(date, "%Y-%m-%d")
     start_date = end_date + timedelta(days=-2)
@@ -138,4 +164,3 @@ class Close_Contacts(APIView):
     def get(self, rquest, id, date):
 
         return Response(get_close_contacts(id, date))
-
