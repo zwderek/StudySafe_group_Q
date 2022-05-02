@@ -153,9 +153,12 @@ class Visited_Venues(APIView):
 
     def get(self, request, id, date):
         data = get_visited_venues(id, date)
+        return Response(data)
+        '''
         return Response(["Venue code: " + i['venue'] +
                          " Enter time: " + i['enter_time'] +
                          " Exit time: " + i['exit_time'] for i in data])
+        '''
 
 class Close_Contacts(APIView):
 
