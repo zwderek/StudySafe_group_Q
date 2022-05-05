@@ -42,8 +42,7 @@ class HKU_Venues(APIView):
         return Response(data.data)
 
     def post(self, request):
-        data = VenueSerializer(data=request.data)
-        venue = VenueSerializer(data=data)
+        venue = VenueSerializer(data=request.data)
         if venue.is_valid():
             venue.save()
             return Response(venue.data, status=201)
