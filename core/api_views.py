@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from datetime import datetime, timedelta
 import pytz
+from rest_framework import status
 
 class Members(APIView):
 
@@ -34,6 +35,25 @@ class Member(APIView):
         data = HKU_memberSerializer(member)
         return Response(data.data)
 
+    def put(self, request, pk):
+        try:
+            member = HKU_member.objects.get(hku_id=pk)
+        except HKU_member.DoesNotExist:
+            member = HKU_memberSerializer(data=request.data, many=False)
+            member.save(force_insert=True)
+            members = HKU_member.objects.all()
+            data = HKU_memberSerializer(members, many=True)
+            return Response(data.data)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            member = HKU_member.objects.get(hku_id=pk)
+        except HKU_member.DoesNotExist:
+            return HttpResponse(status=404)
+        member.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class HKU_Venues(APIView):
 
     def get(self, request):
@@ -58,6 +78,25 @@ class HKU_Venue(APIView):
         data = VenueSerializer(venue)
         return Response(data.data)
 
+    def put(self, request, pk):
+        try:
+            venue = Venue.objects.get(venue_code=pk)
+        except Venue.DoesNotExist:
+            venue = VenueSerializer(data=request.data, many=False)
+            venue.save(force_insert=True)
+            venues = Venue.objects.all()
+            data = VenueSerializer(venues, many=True)
+            return Response(data.data)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk):
+        try:
+            venue = Venue.objects.get(venue_code=pk)
+        except Venue.DoesNotExist:
+            return HttpResponse(status=404)
+        venue.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class Entry_Exits(APIView):
 
     def get(self, request):
@@ -74,6 +113,11 @@ class Entry_Exits(APIView):
         return Response(ee.errors, status=400)
 
 class Entry_Exit(APIView):#API8
+
+    def get(self, request, hku_id, venue_id, time):
+        ees = EntryExit.objects.all()
+        data = EntryExitSerializer(ees, many=True)
+        return Response(data.data)
 
     def post(self, request, hku_id, venue_id, time):
         try:
