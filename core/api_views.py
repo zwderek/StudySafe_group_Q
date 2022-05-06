@@ -36,11 +36,12 @@ class Member(APIView):
         return Response(data.data)
 
     def put(self, request, pk):
-        member = HKU_memberSerializer(data=request.data)
-        member.save()
-        members = HKU_member.objects.all()
-        data = HKU_memberSerializer(members, many=True)
-        return Response(data.data)
+        member = HKU_member.objects.get(hku_id=pk)
+        serializer = HKU_memberSerializer(member, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         try:
