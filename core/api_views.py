@@ -74,13 +74,14 @@ class HKU_Venue(APIView):
             return HttpResponse(status=404)
         data = VenueSerializer(venue)
         return Response(data.data)
-
+    
     def put(self, request, pk):
-        venue = VenueSerializer(data=request.data, many=False)
-        venue.save()
-        venues = Venue.objects.all()
-        data = VenueSerializer(venues, many=True)
-        return Response(data.data)
+        venue = Venue.objects.get(venue_code=pk)
+        serializer = VenueSerializer(venue, data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
         try:
